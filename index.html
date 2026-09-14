@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بببببخشید کلاغ شوشولو من</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #ffffff;
+    font-family: Tahoma, 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .card {
+    max-width: 560px;
+    z-index: 2;
+  }
+
+  .cats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .cat {
+    font-size: 4rem;
+    display: inline-block;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  .cat:nth-child(2) { animation-delay: 0.3s; }
+  .cat:nth-child(3) { animation-delay: 0.6s; }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  h1 {
+    color: #ff6f91;
+    font-size: 2.4rem;
+    margin-bottom: 14px;
+    font-weight: 800;
+  }
+
+  p {
+    color: #555;
+    font-size: 1.15rem;
+    line-height: 2;
+    margin: 0 0 30px 0;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    min-height: 60px;
+  }
+
+  button {
+    border: none;
+    padding: 16px 28px;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+  }
+
+  #kissBtn {
+    background: #ff8fa3;
+    color: white;
+    box-shadow: 0 6px 18px rgba(255, 143, 163, 0.4);
+  }
+  #kissBtn:hover { transform: scale(1.06); }
+
+  #cuddleBtn {
+    background: #ffd6a5;
+    color: #7a4a12;
+    box-shadow: 0 6px 18px rgba(255, 214, 165, 0.5);
+  }
+  #cuddleBtn:hover { transform: scale(1.06); }
+
+  #leaveBtn {
+    background: #eee;
+    color: #888;
+    position: relative;
+    z-index: 5;
+  }
+
+  #leaveBtn.roaming {
+    position: fixed;
+    transition: top 0.25s ease, left 0.25s ease;
+  }
+
+  .kiss-emoji {
+    font-size: 2rem;
+    margin-right: 6px;
+  }
+
+  .date-question {
+    margin-top: 36px;
+    font-size: 1.2rem;
+    color: #ff6f91;
+    font-weight: 700;
+  }
+
+  #dateYesBtn {
+    background: #ff6f91;
+    color: white;
+    box-shadow: 0 6px 18px rgba(255, 111, 145, 0.4);
+  }
+  #dateYesBtn:hover { transform: scale(1.06); }
+
+  .status {
+    margin-top: 26px;
+    min-height: 30px;
+    font-size: 1.2rem;
+    color: #ff6f91;
+    font-weight: 600;
+  }
+
+  .floating-heart {
+    position: fixed;
+    bottom: -10px;
+    font-size: 1.4rem;
+    opacity: 0.9;
+    animation: rise linear forwards;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  @keyframes rise {
+    0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.9; }
+    100% { transform: translateY(-100vh) translateX(var(--drift, 20px)) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="cats">
+    <span class="cat">🐱</span>
+    <span class="cat">😻</span>
+    <span class="cat">🐈</span>
+  </div>
+
+  <h1>ببخشید عزیزم! 💌</h1>
+
+  <p>
+    تو یه دختر خیلی خیلی بامزه‌ای و من عاشق شیطنت و بازیگوشیِ توام.
+    لطفاً هیچ‌وقت این حس و حالتو کمرنگ نکن، نه برای من نه برای هیچ‌کس دیگه.
+    من تو رو دقیقاً همین‌جوری که هستی دوست دارم.
+  </p>
+
+  <div class="buttons">
+    <button id="kissBtn"><span class="kiss-emoji">😘</span>فرستادن یک بوسه عذرخواهی</button>
+    <button id="cuddleBtn">بغل کردن 🤗</button>
+    <button id="leaveBtn">رفتن</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <p class="date-question">آیا بانوی زیبا امروز قبول می‌کنن با من به قرار بیان؟</p>
+  <div class="buttons">
+    <button id="dateYesBtn">بله، میام 🥰</button>
+  </div>
+</div>
+
+<script>
+  const emojis = ["💗","😻","🐾","💌","💕"];
+  function spawnHeart(count) {
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement("div");
+      el.className = "floating-heart";
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.setProperty("--drift", (Math.random() * 80 - 40) + "px");
+      el.style.animationDuration = (2.5 + Math.random() * 2) + "s";
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 5000);
+    }
+  }
+
+  // gentle ambient hearts
+  setInterval(() => spawnHeart(1), 700);
+
+  const statusEl = document.getElementById("status");
+
+  document.getElementById("kissBtn").addEventListener("click", () => {
+    spawnHeart(20);
+    statusEl.textContent = "بوسه فرستاده شد 😘💕";
+    setTimeout(() => statusEl.textContent = "", 2500);
+  });
+
+  document.getElementById("cuddleBtn").addEventListener("click", () => {
+    spawnHeart(8);
+    statusEl.textContent = "دارم محکم بغلت می‌کنم 🤗💛";
+    setTimeout(() => statusEl.textContent = "", 2500);
+  });
+
+  // Leave button runs away on hover, click, or touch
+  const leaveBtn = document.getElementById("leaveBtn");
+
+  function dodge() {
+    leaveBtn.classList.add("roaming");
+    const rect = leaveBtn.getBoundingClientRect();
+    const maxLeft = window.innerWidth - rect.width - 20;
+    const maxTop = window.innerHeight - rect.height - 20;
+    const newLeft = Math.max(10, Math.random() * maxLeft);
+    const newTop = Math.max(10, Math.random() * maxTop);
+    leaveBtn.style.left = newLeft + "px";
+    leaveBtn.style.top = newTop + "px";
+  }
+
+  leaveBtn.addEventListener("mouseenter", dodge);
+  leaveBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    dodge();
+    statusEl.textContent = "نچ، نمی‌ذارم بری 🐾";
+    setTimeout(() => statusEl.textContent = "", 2000);
+  });
+  leaveBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    dodge();
+  });
+
+  document.getElementById("dateYesBtn").addEventListener("click", () => {
+    spawnHeart(30);
+    statusEl.textContent = "یعنی قراره یه قرار خفن داشته باشیم 🥹💕";
+    setTimeout(() => statusEl.textContent = "", 3000);
+  });
+</script>
+
+</body>
+</html>
